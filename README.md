@@ -1,8 +1,6 @@
-AndroidWifiShare
+SmarTransfer
 ================
 
-This a project to share file with android.
+This is a project to share files through android
 
-Just save this project.
 
-From:http://vaero.blog.51cto.com/4350852/939413

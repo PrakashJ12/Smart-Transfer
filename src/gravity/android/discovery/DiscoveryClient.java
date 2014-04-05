@@ -16,7 +16,7 @@
 
 */
 
-package it.nicola_amatucci.android.discovery;
+package gravity.android.discovery;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -25,6 +25,8 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import org.json.JSONObject;
 
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -50,7 +52,7 @@ public class DiscoveryClient {
 			clientSocket.setBroadcast(true);
 			InetAddress IPAddress = Utils.getBroadcastAddress(mWifi);
 			Log.v("DISCOVERY_CLIENT", "broadcast addr " + IPAddress.getHostAddress());
-			byte[] receiveData = new byte[128];
+			byte[] receiveData = new byte[2048];
 			byte[] sendData = new byte[128];
 			
 			sendData = token.getBytes();
@@ -78,13 +80,23 @@ public class DiscoveryClient {
 						if (received != null)
 						{
 							received = received.trim().substring(0, receivePacket.getLength()).trim();
-							StringTokenizer st = new StringTokenizer(received, ",");
+							Log.d("Recieved Msg Packet:", received);
+							
+							//StringTokenizer st = new StringTokenizer(received, ",");
+							
+							//Gravity Code
+							JSONObject recievedJson = new JSONObject(received);
+							
 							
 							try
 							{
-								discovered_name = st.nextToken();							
+								//discovered_name = st.nextToken();	
+								discovered_name = recievedJson.getString("name"); //Gravity code
+								
 								discovered_ip = receivePacket.getAddress().getHostAddress();
-								discovered_port = Integer.parseInt(st.nextToken());
+								
+								//discovered_port = Integer.parseInt(st.nextToken());
+								discovered_port = recievedJson.getInt("port_to_share"); //Gravity code
 															
 								Log.v("DISCOVERY_CLIENT", "discovered " + discovered_name + ", " + discovered_ip + ":" + discovered_port);
 															

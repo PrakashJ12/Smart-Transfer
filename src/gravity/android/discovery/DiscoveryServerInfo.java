@@ -16,7 +16,7 @@
 
 */
 
-package it.nicola_amatucci.android.discovery;
+package gravity.android.discovery;
 
 public class DiscoveryServerInfo {
 	public String name;

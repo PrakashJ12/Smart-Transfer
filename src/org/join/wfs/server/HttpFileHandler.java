@@ -68,7 +68,7 @@ public class HttpFileHandler implements HttpRequestHandler {
 		}
 	}
 
-	/** 创建文件列表浏览网页 */
+	/** Create a file list browsing  */
 	private StringEntity createDirListHtml(File dir, String target)
 			throws UnsupportedEncodingException {
 		StringBuffer sb = new StringBuffer();

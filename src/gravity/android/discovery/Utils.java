@@ -17,7 +17,7 @@
     Credits to http://code.google.com/p/boxeeremote/wiki/AndroidUDP
 */
 
-package it.nicola_amatucci.android.discovery;
+package gravity.android.discovery;
 
 import java.io.IOException;
 import java.net.InetAddress;

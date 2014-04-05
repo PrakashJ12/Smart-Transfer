@@ -1,5 +1,8 @@
 package org.join.wfs;
 
+import gravity.android.discovery.*;
+
+import java.io.File;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -9,11 +12,15 @@ import java.util.Enumeration;
 import org.join.wfs.server.WebService;
 import org.join.wfs.util.CopyUtil;
 
+
+
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -26,6 +33,9 @@ public class WFSShareActivity extends Activity implements OnCheckedChangeListene
 	private TextView urlText;
 
 	private Intent intent;
+	File myFile;
+	
+	DiscoveryServer Broadcast_Server;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +51,19 @@ public class WFSShareActivity extends Activity implements OnCheckedChangeListene
 			finish();
 			return;
 		}
+		Uri myUri = myUris.get(0);
 		
-		urlText.setText("File(s): " + Uri.decode(myUris.toString()));
+		//urlText.setText("File(s): " + Uri.decode(myUri.toString()));
+		//urlText.setText("File(s): " + myUri.getPath());
+		
+		myFile = new File(myUri.getPath());
+		
+		
+		Log.d("URI toString:", myUri.toString());
+		Log.d("Absolute FilePath:", myFile.getAbsolutePath());
+		urlText.setText("File(s): " + myFile.getAbsolutePath());
+		 
+		
 	}
 
 	private void initViews() {
@@ -108,6 +129,8 @@ public class WFSShareActivity extends Activity implements OnCheckedChangeListene
 			} else {
 				startService(intent);
 				urlText.setText("http://" + ip + ":" + WebService.PORT + "/");
+				
+				Broadcast_Server = new DiscoveryServer(myFile.getAbsolutePath(), WebService.PORT, "MYAPP_TOKEN"); //Gravity: starts the UDP broadcast server
 			}
 		} else {
 			stopService(intent);

@@ -16,11 +16,14 @@
 
 */
 
-package it.nicola_amatucci.android.discovery;
+package gravity.android.discovery;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.jar.Attributes.Name;
+
+import org.json.JSONObject;
 
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -66,6 +69,7 @@ public class DiscoveryServer extends Thread
 	public void run()
 	{
 		Log.v("DISCOVERY_SERVER", "SERVER STARTED");
+		
 		DatagramSocket serverSocket = null;
 		
 		try
@@ -92,8 +96,14 @@ public class DiscoveryServer extends Thread
 			        if (sentence != null && sentence.substring(0, receivePacket.getLength()).trim().equals(token))
 			        {
 			        	Log.v("DISCOVERY_SERVER", "SEND '" + nome +"' to " + receivePacket.getAddress().getHostAddress() + ":" + receivePacket.getPort());        
-				        sendData = (nome + "," + port_to_share).getBytes();
-				        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, receivePacket.getAddress(), receivePacket.getPort());
+				        JSONObject sendDataJson = new JSONObject();
+				        sendDataJson.accumulate("name", nome);
+				        sendDataJson.accumulate("port_to_share", port_to_share);
+				        
+			        	//sendData = (nome + "," + port_to_share).getBytes();
+			        	sendData = sendDataJson.toString().getBytes(); //Prakash: converts the data to json objects to avoid troubles
+				        
+			        	DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, receivePacket.getAddress(), receivePacket.getPort());
 				        serverSocket.send(sendPacket);
 			        }
 			        
